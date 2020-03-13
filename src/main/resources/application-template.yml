@@ -1,0 +1,9 @@
+line.bot:
+  channel-token: <your token>
+  channel-secret: <your secret>
+  handler.path: /callback
+
+Server:
+  image: https://imgur.com/zwY6PHr.jpg
+  pre: https://imgur.com/COoddgs.jpg
+  sendto: <line user id>

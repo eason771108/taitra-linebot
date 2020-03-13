@@ -1,0 +1,39 @@
+plugins {
+    id 'java'
+}
+
+jar {
+
+    from {
+        configurations.runtime.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+
+    manifest {
+        attributes (
+                'Main-Class' : 'linebot.MorningCallApplication'
+        )
+    }
+}
+
+group 'org.taitra'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    // https://mvnrepository.com/artifact/com.linecorp.bot/line-bot-api-client
+    compile  group: 'com.linecorp.bot', name: 'line-bot-api-client', version: '3.3.1'
+
+    // https://mvnrepository.com/artifact/org.yaml/snakeyaml
+    compile  group: 'org.yaml', name: 'snakeyaml', version: '1.17'
+
+//    // https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12
+//    compile  group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.25'
+}
