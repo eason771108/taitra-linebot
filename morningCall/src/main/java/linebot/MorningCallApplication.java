@@ -3,10 +3,14 @@ package linebot;
 import com.linecorp.bot.client.LineMessagingClient;
 import com.linecorp.bot.model.PushMessage;
 import com.linecorp.bot.model.message.ImageMessage;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.Arrays;
@@ -15,6 +19,17 @@ import java.util.Map;
 public class MorningCallApplication {
 
     //final static Logger logger = LoggerFactory.getLogger(MorningCallApplication.class);
+
+    public static String getRequest(String url) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            return response.body().string();
+        }
+    }
 
     public static void main(String[] args) throws Exception {
 
@@ -44,8 +59,12 @@ public class MorningCallApplication {
         String accessToken = ((Map<String, String>) settings.get("line.bot")).get("channel-token");
         final LineMessagingClient client = LineMessagingClient.builder(accessToken).build();
 
-        URI imgURI = URI.create( (String) settings.get("image"));
-        URI preURI = URI.create( (String) settings.get("pre"));
+        Yaml picYaml = new Yaml();
+
+        Map<String, Object> picSettings = (Map<String, Object>) picYaml.load(getRequest((String)settings.get("picyamUrl")));
+
+        URI imgURI = URI.create( (String) picSettings.get("image"));
+        URI preURI = URI.create( (String) picSettings.get("pre"));
 
         System.out.println("imgURI : {" + imgURI.toString() +"}");
         System.out.println("preURI : {" + preURI.toString() +"}");
