@@ -4,3 +4,4 @@ line.bot:
   handler.path: /callback
 
 picyamUrl: <location of pic.yml>
+sendto: <line user/room/group id>
